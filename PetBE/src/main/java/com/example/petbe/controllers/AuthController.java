@@ -54,6 +54,23 @@ public class AuthController {
 
         return new ResponseEntity<>("User registered success!", HttpStatus.OK);
     }
+    @PostMapping("login")
+    public ResponseEntity<?> loginUser(@RequestBody User userEntity, HttpSession session, HttpServletResponse response) {
+        try {
 
+            LoginRequestDTO loginRequestDTO = modelMapper.map(userEntity, LoginRequestDTO.class);
+
+            User user = userService.loginUser(loginRequestDTO.getGmail(), loginRequestDTO.getPassword());
+
+            String token = JWTConfig.generateToken(response,user.getFull_name());
+            LoginResponseDTO responseDTO = new LoginResponseDTO(token,user.getFull_name());
+            session.setAttribute("name", user.getFull_name());
+            session.setAttribute("token", token);
+            return ResponseEntity.ok(responseDTO);
+        } catch (IllegalArgumentException e) {
+            // Nếu có lỗi xảy ra trong quá trình đăng nhập, trả về lỗi UNAUTHORIZED
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
 
 }
