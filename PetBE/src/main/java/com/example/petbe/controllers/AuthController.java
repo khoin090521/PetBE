@@ -1,8 +1,15 @@
 package com.example.petbe.controllers;
 
+import com.example.petbe.config.JWTConfig;
+import com.example.petbe.dto.LoginRequestDTO;
+import com.example.petbe.dto.LoginResponseDTO;
 import com.example.petbe.dto.RegisterDto;
 import com.example.petbe.models.User;
 import com.example.petbe.repositories.UserRepository;
+import com.example.petbe.services.UserService;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +24,11 @@ import org.springframework.http.HttpStatus;
 public class AuthController {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public AuthController( UserRepository userRepository,
@@ -42,4 +54,6 @@ public class AuthController {
 
         return new ResponseEntity<>("User registered success!", HttpStatus.OK);
     }
+
+
 }

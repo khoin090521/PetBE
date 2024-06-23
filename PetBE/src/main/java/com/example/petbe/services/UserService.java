@@ -1,4 +1,8 @@
 package com.example.petbe.services;
 
-public class UserService {
+
+import com.example.petbe.models.User;
+
+public interface UserService {
+    
 }
